@@ -7,7 +7,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/play',
+      path: '/',
       name: 'Game',
       component: Game
     }
