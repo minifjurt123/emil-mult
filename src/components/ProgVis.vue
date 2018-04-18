@@ -4,10 +4,9 @@
 			<td>{{ max - v + 1 }}</td>
 			<td 
         v-for="h of max" 
-        :key="h" 
-        :class="{ grey: max - v + 1 < h || h < min, finished: !remaining.find(e => e[0] == h && e[1] == max - v + 1), current: current && current[0] == h && current[1] == max - v + 1 }"
-        class="block">
-				<!-- <span style="color:grey">{{ max - v + 1 }}{{ h }}</span> -->
+        :key="h">
+        <div class="block" :class="{ grey: max - v + 1 < h || h < min, finished: !remaining.find(e => e[0] == h && e[1] == max - v + 1), current: current && current[0] == h && current[1] == max - v + 1 }">
+        </div>
 			</td>
 		</tr>
 		<tfoot>
@@ -45,11 +44,12 @@ export default {
 table {
   border-collapse: collapse;
 }
-td {
+.block {
   width: 1.4em;
   height: 1.4em;
-  border: 6px solid white;
-  border-radius: 5px;
+  margin: 0.2em;
+  border-radius: 0.1em;
+  transition: background-color 100ms linear;
 }
 .body td:first-child,
 tfoot th {
@@ -57,7 +57,7 @@ tfoot th {
   color: rgb(113, 133, 138);
 }
 .block.current {
-  background-color: rgb(173, 125, 189);
+  background-color: var(--accent);
 }
 .block.grey {
   background-color: rgb(172, 172, 172);

@@ -1,14 +1,16 @@
 <template>
-  <div>
+  <div @click="$refs.numinput.focus()">
 	  <div class="container">
       <div>
         <mult-vis :max="max" :current="current" />
         <p class="mult-text">{{ current ? current.join(' * ') : "start the gamp" }}</p>
-        <input ref="num-input" @input="onInput" type="text" min="0" :max="max * max" autofocus="true" :disabled="!running">
+        <input class="number-input" ref="numinput" @input="onInput" type="text" min="0" :maxlength="String(max * max).length" :max="max * max" autofocus="true" :disabled="!running" :placeholder="current ? current.join(' * ') : 'start the gamp'" />
       </div>
+      <div class="gutter"></div>
       <prog-vis :remaining="remaining" :current="current" :max="max" :min="min" :highlight="null" />
     </div>
     <button v-if="!running" @click="startGame">Start</button>
+    <button v-if="debug" @click="remaining.length = 0">Cleanse!</button>
     <p v-if="end">{{ end / 1000 }}</p>
 	</div>
 </template>
@@ -16,11 +18,13 @@
 <script>
 import ProgVis from "@/components/ProgVis";
 import MultVis from "@/components/MultVis";
+import BInput from "@/components/Input";
 
 export default {
   components: {
     ProgVis,
-    MultVis
+    MultVis,
+    BInput
   },
   data() {
     let max = 9,
@@ -39,7 +43,10 @@ export default {
       start: null,
       end: null
     };
-  },
+	},
+	props: {
+		debug: Boolean
+	},
   methods: {
     getNext() {
       if (this.remaining.length === 0) {
@@ -54,6 +61,15 @@ export default {
     endGame() {
       this.end = performance.now();
       this.running = false;
+
+      this.$router.push({
+        name: "Home",
+        params: {
+          registeredTime: (this.end - this.start) / 1000,
+          max: this.max,
+          min: this.min
+        }
+      });
     },
     startGame() {
       this.start = performance.now();
@@ -61,8 +77,11 @@ export default {
         this.getNext();
       }
       this.running = true;
+			this.$refs.numinput.focus()
+			console.log(this.$refs.numinput)
     },
     onInput(event) {
+      event.target.value = event.target.value.replace(/\D/, "");
       if (Number(event.target.value) == this.current[0] * this.current[1]) {
         event.target.value = null;
         this.getNext();
@@ -73,26 +92,19 @@ export default {
 </script>
 
 <style scoped>
-table {
-  border-collapse: collapse;
-}
-td {
-  width: 1.2em;
-  height: 1.2em;
-  border: 10px solid white;
-  border-radius: 5px;
-}
-.body td:first-child,
-tfoot th {
-  font-weight: bold;
-  color: rgb(113, 133, 138);
-}
 .container {
   justify-content: center;
   display: flex;
-  background-color: white;
 }
 .mult-text {
   font-weight: bold;
+}
+.gutter {
+  width: 2.5rem;
+}
+input {
+  border: none;
+  padding: 0.6rem;
+  font-size: 1.2rem;
 }
 </style>

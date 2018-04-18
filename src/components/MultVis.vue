@@ -2,7 +2,9 @@
   <table>
     <tr v-for="n in max" :key="max - n + 1">
       <td class="">{{ max - n + 1 }}</td>
-      <td v-for="m in max" :class="{ marked: current && current[0] >= (max - n + 1) && current[1] >= m }" :key="`${m}`"></td>
+      <td v-for="m in max" :key="`${m}`">
+        <div class="block" :class="{ marked: current && current[0] >= (max - n + 1) && current[1] >= m }"></div>
+      </td>
     </tr>
     <tfoot>
       <tr>
@@ -31,18 +33,19 @@ export default {
 table {
   border-collapse: collapse;
 }
-td {
+.block {
   width: 1.4em;
   height: 1.4em;
-  border: 6px solid white;
-  border-radius: 5px;
+  margin: 0.2em;
+  border-radius: 0.1em;
+  transition: background-color 100ms linear;
 }
-.marked {
-  background: red;
+.block.marked {
+  background-color: var(--accent);
 }
 table > tr :first-child,
 tfoot td {
-  color: #aaa;
+  color: rgb(113, 133, 138);
   font-weight: bold;
 }
 </style>

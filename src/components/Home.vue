@@ -1,98 +1,115 @@
 <template>
   <div>
-	  <div class="container">
-      <div>
-        <mult-vis :max="max" :current="current" />
-        <p class="mult-text">{{ current ? current.join(' * ') : "start the gamp" }}</p>
-        <input ref="num-input" @input="onInput" type="text" min="0" :max="max * max" autofocus="true" :disabled="!running">
-      </div>
-      <prog-vis :remaining="remaining" :current="current" :max="max" :min="min" :highlight="null" />
+    <div class="container">
+      <score-board />
     </div>
-    <button v-if="!running" @click="startGame">Start</button>
-    <p v-if="end">{{ end / 1000 }}</p>
-	</div>
+    <div class="container">
+      <div>
+        <router-link to="/play" class="link"><button class="button">Play</button></router-link>
+      </div>
+    </div>
+    <div class="mt col" v-if="registeredTime > 0">
+			<div>
+				<h2>Your result</h2>
+				Your time was {{ registeredTime }} seconds
+			</div>
+			<input v-model="name" class="number-input" type="text" autofocus="true" placeholder="Enter a name" />
+			<button class="button" @click="postResult">Post</button>
+    </div>
+  </div>
 </template>
 
 <script>
-import ProgVis from "@/components/ProgVis";
-import MultVis from "@/components/MultVis";
+import ScoreBoard from "@/components/ScoreBoard";
+import BInput from "@/components/Input";
 
 export default {
   components: {
-    ProgVis,
-    MultVis
+    ScoreBoard,
+    BInput
   },
-  data() {
-    let max = 9,
-      min = 2,
-      remaining = [];
-
-    for (let n = min; n < max + 1; n++)
-      for (let m = n; m < max + 1; m++) remaining.push([n, m]);
-
-    return {
-      remaining,
-      current: null,
-      max,
-      min,
-      running: false,
-      start: null,
-      end: null
-    };
+  props: {
+		registeredTime: Number,
+		max: Number,
+		min: Number
   },
   methods: {
-    getNext() {
-      if (this.remaining.length === 0) {
-        this.endGame();
-        return;
-      }
-      this.current = this.remaining.splice(
-        Math.floor(Math.random() * this.remaining.length),
-        1
-      )[0];
-    },
-    endGame() {
-      this.end = performance.now();
-      this.running = false;
-    },
-    startGame() {
-      this.start = performance.now();
-      if (!this.current) {
-        this.getNext();
-      }
-      this.running = true;
-    },
-    onInput(event) {
-      if (Number(event.target.value) == this.current[0] * this.current[1]) {
-        event.target.value = null;
-        this.getNext();
-      }
+    postResult() {
+      if (this.posting) return;
+
+      this.$http
+        .post("/scores", {
+          time: this.registeredTime,
+          max: this.max,
+          min: this.min,
+          name: this.name
+        })
+        .then(d => {
+					this.registeredTime = null;
+          this.posting = true;
+        })
+        .catch(err => {
+          this.posting = false;
+        });
     }
+  },
+  data() {
+    return {
+      name: "",
+      posting: false
+    };
   }
 };
 </script>
 
 <style scoped>
-table {
-  border-collapse: collapse;
-}
-td {
-  width: 1.2em;
-  height: 1.2em;
-  border: 10px solid white;
-  border-radius: 5px;
-}
-.body td:first-child,
-tfoot th {
-  font-weight: bold;
-  color: rgb(113, 133, 138);
-}
 .container {
-  justify-content: center;
   display: flex;
-  background-color: white;
+  justify-content: center;
 }
-.mult-text {
-  font-weight: bold;
+h2 {
+	margin-top: 0;
+	margin-bottom: .4rem;
+}
+
+.button {
+  padding: 1rem 2rem;
+  background-color: var(--blue);
+  border-radius: 0.8rem;
+  color: #eee;
+  /* text-transform: uppercase; */
+  letter-spacing: 0.2rem;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  box-shadow: 0 0.3rem var(--blue-dark);
+  margin-bottom: 0.8rem;
+  margin-top: 1rem;
+}
+.button:hover {
+  transform: translateY(0.3rem);
+  background-color: var(--blue-dark);
+  box-shadow: none;
+}
+
+.link {
+  text-decoration: none;
+}
+.mt {
+  margin-top: 1rem;
+}
+input {
+  border: none;
+  padding: 0.6rem;
+  font-size: 1.2rem;
+  width: 20rem;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  background-color: #eee;
+  padding: 2em;
 }
 </style>
