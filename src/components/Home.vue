@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="container">
-      <score-board />
+      <score-board ref="scoreboard" />
     </div>
     <div class="container">
       <div>
@@ -11,7 +11,7 @@
     <div class="mt col" v-if="registeredTime > 0">
 			<div>
 				<h2>Your result</h2>
-				Your time was {{ registeredTime }} seconds
+				<p>Your time was {{ registeredTime }} seconds</p>
 			</div>
 			<input v-model="name" class="number-input" type="text" autofocus="true" placeholder="Enter a name" />
 			<button class="button" @click="postResult">Post</button>
@@ -29,9 +29,9 @@ export default {
     BInput
   },
   props: {
-		registeredTime: Number,
-		max: Number,
-		min: Number
+    registeredTime: Number,
+    max: Number,
+    min: Number
   },
   methods: {
     postResult() {
@@ -45,8 +45,9 @@ export default {
           name: this.name
         })
         .then(d => {
-					this.registeredTime = null;
+          this.registeredTime = null;
           this.posting = true;
+          this.$refs.scoreboard.fetchScoreboard();
         })
         .catch(err => {
           this.posting = false;
@@ -68,28 +69,30 @@ export default {
   justify-content: center;
 }
 h2 {
-	margin-top: 0;
-	margin-bottom: .4rem;
+  margin-top: 0;
+  margin-bottom: 0.4rem;
 }
 
 .button {
+  /* text-transform: uppercase; */
   padding: 1rem 2rem;
   background-color: var(--blue);
   border-radius: 0.8rem;
   color: #eee;
-  /* text-transform: uppercase; */
   letter-spacing: 0.2rem;
   border: none;
   font-size: 1.1rem;
   cursor: pointer;
-  box-shadow: 0 0.3rem var(--blue-dark);
+  box-shadow: 0 0.5rem var(--blue-dark);
   margin-bottom: 0.8rem;
   margin-top: 1rem;
 }
 .button:hover {
-  transform: translateY(0.3rem);
-  background-color: var(--blue-dark);
+  transform: translateY(0.5rem);
   box-shadow: none;
+}
+.button:active:hover {
+  background-color: var(--blue-dark);
 }
 
 .link {

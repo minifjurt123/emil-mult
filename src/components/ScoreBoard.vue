@@ -2,11 +2,13 @@
 	<table>
 		<thead>
 			<tr>
+				<th>#</th>
 				<th>Name</th>
 				<th>Time</th>
 			</tr>
 		</thead>
 		<tr v-for="(score, index) in scores" :key="index">
+			<td>{{ index + 1 }}</td>
 			<td>{{ score.name }}</td>
 			<td>{{ score.time }}</td>
 		</tr>
@@ -48,6 +50,7 @@ th {
 }
 thead tr {
   border-bottom: 2px #eee solid;
+  color: rgb(100, 100, 100);
 }
 table tr:not(:last-child) {
   border-bottom: 1px #eee solid;
