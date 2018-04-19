@@ -16,6 +16,7 @@
 			<input v-model="name" class="number-input" type="text" autofocus="true" placeholder="Enter a name" />
 			<button class="button" @click="postResult">Post</button>
     </div>
+		<div class="grey"><span>Made by Empinini ;)</span></div>
   </div>
 </template>
 
@@ -64,6 +65,13 @@ export default {
 </script>
 
 <style scoped>
+.grey {
+	text-align: center;
+	bottom: 2em;
+	width: 100%;
+	position: absolute;
+	opacity: 0.4;
+}
 .container {
   display: flex;
   justify-content: center;
