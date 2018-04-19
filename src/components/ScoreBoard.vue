@@ -10,7 +10,7 @@
 		<tr v-for="(score, index) in scores" :key="index">
 			<td>{{ index + 1 }}</td>
 			<td>{{ score.name }}</td>
-			<td>{{ score.time }}</td>
+			<td>{{ score.time.toFixed(3) }}</td>
 		</tr>
 	</table>
 </template>
