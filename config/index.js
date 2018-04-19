@@ -9,7 +9,7 @@ module.exports = {
 
     // Paths
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/',
+    assetsPublicPath: process.env.WEBPACK_PUBLIC_PATH || '/',
     proxyTable: {},
 
     // Various Dev Server settings
