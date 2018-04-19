@@ -66,11 +66,11 @@ export default {
 
 <style scoped>
 .grey {
-	text-align: center;
-	bottom: 2em;
-	width: 100%;
-	position: absolute;
-	opacity: 0.4;
+  text-align: center;
+  bottom: 2em;
+  width: 100%;
+  position: absolute;
+  opacity: 0.4;
 }
 .container {
   display: flex;
@@ -94,10 +94,11 @@ h2 {
   box-shadow: 0 0.5rem var(--blue-dark);
   margin-bottom: 0.8rem;
   margin-top: 1rem;
+  transition: all 100ms ease;
 }
 .button:hover {
   transform: translateY(0.5rem);
-  box-shadow: none;
+  box-shadow: 0 0 var(--blue-dark);
 }
 .button:active:hover {
   background-color: var(--blue-dark);

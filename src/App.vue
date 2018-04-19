@@ -6,7 +6,15 @@
 
 <script>
 export default {
-  name: "App"
+  name: "App",
+  created() {
+    console.log(`
+========================
+Made with 👽 by @follgad
+========================
+		`);
+    console.log("https://github.com/follgad");
+  }
 };
 </script>
 
@@ -14,14 +22,14 @@ export default {
 :root {
   --background: #d3d0cb;
   --accent: #587b7f;
-  
+
   --dark: #393e41;
   --darker: #1e2019;
 
   --blue-light: #8ea4d2;
   --blue: #6279b8;
   --blue-dark: #49516f;
-  
+
   --green-dark: #496f5d;
   --green: #4c9f70;
 }
