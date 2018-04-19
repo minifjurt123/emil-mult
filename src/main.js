@@ -8,7 +8,7 @@ import axios from 'axios'
 Vue.config.productionTip = false
 
 Vue.prototype.$http = axios.create({
-  baseURL: 'http://localhost:1234/'
+  baseURL: 'http://100.benefitcraft.me/mult-api'
 })
 
 /* eslint-disable no-new */
