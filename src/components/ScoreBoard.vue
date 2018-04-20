@@ -5,12 +5,14 @@
 				<th>#</th>
 				<th>Name</th>
 				<th>Time</th>
+				<th>At</th>
 			</tr>
 		</thead>
 		<tr v-for="(score, index) in scores" :key="index">
-			<td>{{ index + 1 }}</td>
+			<td>{{ type !== "last" ? index + 1 : "" }}</td>
 			<td>{{ score.name }}</td>
 			<td>{{ score.time.toFixed(3) }}</td>
+			<td class="lighter">{{ $moment(score.created).fromNow() }}</td>
 		</tr>
 	</table>
 </template>
@@ -23,18 +25,40 @@ export default {
       scores: []
     };
   },
+  props: {
+    type: String
+  },
   mounted() {
     this.fetchScoreboard();
   },
   methods: {
     fetchScoreboard() {
       this.$http
-        .get("/scores")
+        .get(this.url)
         .then(res => {
           this.scores = res.data;
           this.loadingScores = false;
         })
         .catch(console.error);
+    }
+  },
+  watch: {
+    url() {
+      this.fetchScoreboard();
+    }
+  },
+  computed: {
+    url() {
+      switch (this.type) {
+        case "last":
+          return "/scores/last";
+        case "daily":
+          return "/scores/daily";
+        case "weekly":
+          return "/scores/weekly";
+        default:
+          return "/scores";
+      }
     }
   }
 };
@@ -43,6 +67,11 @@ export default {
 <style scoped>
 table {
   text-align: left;
+}
+th:first-child,
+td:first-child {
+  text-align: right;
+  font-weight: bold;
 }
 td,
 th {
@@ -55,5 +84,8 @@ thead tr {
 table tr:not(:last-child) {
   border-bottom: 1px #eee solid;
   padding: 5px;
+}
+.lighter {
+  color: rgb(120, 120, 120);
 }
 </style>

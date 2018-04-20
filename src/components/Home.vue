@@ -1,7 +1,15 @@
 <template>
-  <div>
-    <div class="container">
-      <score-board ref="scoreboard" />
+  <div class="container">
+    <div class="scoreboard-container">
+			<div class="scoreboard-tabs container">
+				<div class="tab" @click="type='last'">Last</div>
+				<div class="tab" @click="type='daily'">Daily</div>
+				<div class="tab" @click="type='weekly'">Weekly</div>
+				<div class="tab" @click="type='all-time'">All time</div>
+			</div>
+			<div>
+				<score-board class="mh-auto scoreboard" :type="type" ref="scoreboard" />
+			</div>
     </div>
     <div class="container">
       <div>
@@ -58,7 +66,8 @@ export default {
   data() {
     return {
       name: "",
-      posting: false
+      posting: false,
+      type: "all-time"
     };
   }
 };
@@ -75,6 +84,23 @@ export default {
 .container {
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  justify-items: center;
+}
+.mh-auto {
+  margin: auto;
+}
+.scoreboard-tabs {
+  display: flex;
+  flex-direction: row;
+}
+.tab {
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 1em;
+}
+.tab:hover {
+  background-color: rgba(120, 120, 120, 0.1);
 }
 h2 {
   margin-top: 0;
