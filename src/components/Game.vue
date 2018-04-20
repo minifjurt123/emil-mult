@@ -4,14 +4,12 @@
       <div>
         <mult-vis :max="max" :current="current" />
         <p class="mult-text">{{ current ? current.join(' * ') : "start the gamp" }}</p>
-        <input class="number-input" ref="numinput" @input="onInput" type="text" min="0" :maxlength="String(max * max).length" :max="max * max" autofocus="true" :disabled="!running" :placeholder="current ? current.join(' * ') : 'start the gamp'" />
+        <input class="number-input" ref="numinput" @keydown="onInputStart" @input="onInput" type="text" min="0" :maxlength="String(max * max).length" :max="max * max" autofocus="true" :placeholder="current ? current.join(' * ') : `Press the 'any' key to start`" />
       </div>
       <div class="gutter"></div>
       <prog-vis :remaining="remaining" :current="current" :max="max" :min="min" :highlight="null" />
     </div>
-    <button v-if="!running" @click="startGame">Start</button>
     <button v-if="debug" @click="remaining.length = 0">Cleanse!</button>
-    <p v-if="end">{{ end / 1000 }}</p>
 	</div>
 </template>
 
@@ -43,10 +41,10 @@ export default {
       start: null,
       end: null
     };
-	},
-	props: {
-		debug: Boolean
-	},
+  },
+  props: {
+    debug: Boolean
+  },
   methods: {
     getNext() {
       if (this.remaining.length === 0) {
@@ -77,16 +75,36 @@ export default {
         this.getNext();
       }
       this.running = true;
-			this.$refs.numinput.focus()
-			console.log(this.$refs.numinput)
     },
     onInput(event) {
+      if (!this.running) {
+        return;
+      }
       event.target.value = event.target.value.replace(/\D/, "");
       if (Number(event.target.value) == this.current[0] * this.current[1]) {
         event.target.value = null;
         this.getNext();
       }
+    },
+    onInputStart(event) {
+      if (this.running) return;
+      event.preventDefault();
+      event.target.value = "";
+      this.startGame();
+    },
+    onMounted(e) {
+      if (!this.running) {
+        this.$refs.numinput.focus();
+        this.startGame();
+        e.preventDefault();
+      }
     }
+  },
+  mounted() {
+    document.addEventListener("keydown", this.onMounted);
+  },
+  beforeDestroy() {
+    document.removeEventListener("keydown", this.onMounted);
   }
 };
 </script>
@@ -106,5 +124,6 @@ input {
   border: none;
   padding: 0.6rem;
   font-size: 1.2rem;
+  width: 100%;
 }
 </style>
