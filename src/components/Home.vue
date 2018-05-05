@@ -2,10 +2,10 @@
   <div class="container">
     <div class="scoreboard-container">
 			<div class="scoreboard-tabs container">
-				<div class="tab" @click="type='last'">Last</div>
-				<div class="tab" @click="type='daily'">Daily</div>
-				<div class="tab" @click="type='weekly'">Weekly</div>
-				<div class="tab" @click="type='all-time'">All time</div>
+				<div class="tab" :class="type=='last' && 'active'" @click="type='last'">Last</div>
+				<div class="tab" :class="type=='daily' && 'active'" @click="type='daily'">Daily</div>
+				<div class="tab" :class="type=='weekly' && 'active'" @click="type='weekly'">Weekly</div>
+				<div class="tab" :class="type=='all-time' && 'active'" @click="type='all-time'">All time</div>
 			</div>
 			<div>
 				<score-board class="mh-auto scoreboard" :type="type" ref="scoreboard" />
@@ -100,6 +100,9 @@ export default {
   border-radius: 1em;
 }
 .tab:hover {
+  background-color: rgba(120, 120, 120, 0.1);
+}
+.active {
   background-color: rgba(120, 120, 120, 0.1);
 }
 h2 {

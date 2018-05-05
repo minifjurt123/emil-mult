@@ -12,7 +12,7 @@
 			<td>{{ type !== "last" ? index + 1 : "" }}</td>
 			<td>{{ score.name }}</td>
 			<td>{{ score.time.toFixed(3) }}</td>
-			<td class="lighter">{{ score.created ? $moment(score.created).fromNow() : "-" }}</td>
+			<td class="lighter" :title="score.created ? $moment(score.created).format('YYYY-MM-DD HH:mm:ss.ms') : null">{{ score.created ? $moment(score.created).fromNow() : "-" }}</td>
 		</tr>
 	</table>
 </template>
