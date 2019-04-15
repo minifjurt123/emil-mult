@@ -5,11 +5,11 @@ import App from './App'
 import router from './router'
 import axios from 'axios'
 import moment from 'moment'
-
+import {apiURL} from './config'
 Vue.config.productionTip = false
 
 Vue.prototype.$http = axios.create({
-	baseURL: 'http://mult.benefitcraft.me/api'
+  baseURL: apiURL || 'http://mult.benefitcraft.me/api'
 })
 Vue.prototype.$moment = moment;
 
